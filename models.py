@@ -1,5 +1,7 @@
 from sqlalchemy import create_engine, Column, Integer, String, Boolean, Float,ForeignKey
 from sqlalchemy.orm import  declarative_base
+from sqlalchemy_utils.types import ChoiceType
+
 # cria a conexão com o banco de dados, nesse caso, um banco de dados SQLite chamado "banco.db"
 db = create_engine("sqlite:///banco.db")
 
@@ -28,14 +30,21 @@ class Usuario(Base):
 #pedido
 class Pedido(Base):
     __tablename__ = "pedidos"
+    status_pedidos = {
+        "PENDENTE": "PENDENTE",
+        "FINALIZADO": "FINALIZADO",
+        "CANCELADO": "CANCELADO"
+    }
+
+
     id = Column("id", Integer, primary_key=True, index=True, autoincrement=True)
     #foreign key para relacionar o pedido com o usuário que fez o pedido
     usuario_id = Column("usuario_id", Integer, ForeignKey("usuarios.id"))
     valor_total = Column("valor_total", Float)
-    status = Column("status", String) #pendente, pago, cancelado
+    status = Column("status", ChoiceType(status_pedidos)) #pendente, pago, cancelado
    
 
-    def __init__(self, usuario_id, valor_total, status):
+    def __init__(self, usuario_id, valor_total, status="PEDENTE"):
         self.usuario_id = usuario_id
         self.valor_total = valor_total
         self.status = status
