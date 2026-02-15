@@ -12,17 +12,11 @@ order_router = APIRouter(prefix="/pedidos", tags=["pedidos"])
 async def pedidos():
     return {"message": "Voçe acessou a rota de pedidos"}
 
-
+## order_router.post("/pedido") é o endpoint para criar um novo pedido. Ele recebe um objeto do tipo PedidoSchema no corpo da requisição e uma sessão do banco de dados como dependência. A função cria um novo pedido usando os dados fornecidos, adiciona o pedido à sessão do banco de dados, comita a transação e retorna uma mensagem de sucesso com o ID do novo pedido.
 @order_router.post("/pedido")
-async def criar_pedido(
-    pedido_schema: PedidoSchema,
-    session: Session = Depends(pegar_sessao)
-):
+async def criar_pedido( pedido_schema: PedidoSchema, session: Session = Depends(pegar_sessao)):
 
-    novo_pedido = Pedido(
-        usuario_id = pedido_schema.usuario,
-        valor_total = pedido_schema.valor_total
-    )
+    novo_pedido = Pedido( usuario_id = pedido_schema.usuario,valor_total = pedido_schema.valor_total )
 
     session.add(novo_pedido)
     session.commit()

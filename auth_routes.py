@@ -35,5 +35,12 @@ async def registro(usuario_schema: UsuarioSchema, session: Session = Depends(peg
 
     return {"msg": f"Usuário criado com sucesso, {usuario_schema.email}"}
 
+
+@auth_router.post("/Login")
+async def login(usuario_schema: UsuarioSchema, session: Session = Depends(pegar_sessao));
+
+
+
         
 ## depends é uma função do FastAPI que permite injetar dependências em suas rotas. Nesse caso, estamos usando Depends(pegar_sessao) para injetar a sessão do banco de dados na função de registro. Isso significa que toda vez que a rota de registro for chamada, o FastAPI irá criar uma nova sessão do banco de dados e passá-la para a função de registro como um argumento
+
