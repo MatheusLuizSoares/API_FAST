@@ -11,3 +11,11 @@ class UsuarioSchema(BaseModel):
 
     class Config:
         from_attributes = True
+
+class PedidoSchema(BaseModel):
+
+    usuario: int
+    valor_total: float
+
+    class Config:
+        from_attributes = True
