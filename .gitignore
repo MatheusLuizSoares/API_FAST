@@ -27,7 +27,7 @@ Thumbs.db
 
 # Alembic (opcional — mantenha só as migrações)
 alembic/__pycache__/
-
+versions/
 # Arquivos temporários
 *.tmp
 *.temp
