@@ -7,12 +7,19 @@ from main import bcrypt_context
 from schemas import UsuarioSchema, loginSchema
 from sqlalchemy.orm import Session
 from jose import JWTError, jwt
+from datetime import datetime, timedelta, timezone
+from main import AlgORITHM, Access_TOKEN_EXPIRE_MINUTES, SECRET_KEY
 
 #ESSE é o meu prefixo do meu router, ou seja, todas as rotas que eu criar aqui dentro do auth_router vão começar com /auth
 auth_router = APIRouter(prefix="/auth", tags=["auth"])
 
-def criar_token(email)
-   token = f""
+def criar_token(id_usuario):
+   data_expiracao = datetime.now(timezone.utc) + timedelta(minutes=Access_TOKEN_EXPIRE_MINUTES)
+   dic_informacao= { 'sub': id_usuario, 'exp': data_expiracao }
+   jwt_codficado = jwt.encode(dic_informacao, SECRET_KEY, algorithm=AlgORITHM)
+
+
+   return jwt_codficado
 
 def autenticar_usuario(email, senha, session):
     usuario = session.query(Usuario).filter(Usuario.email == email).first()
