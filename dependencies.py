@@ -1,6 +1,10 @@
 from models import db
 from sqlalchemy.orm import sessionmaker
-
+from models import Usuario
+from sqlalchemy.orm import Session
+from fastapi import Depends
+from jose import JWTError, jwt
+from main import SECRET_KEY, AlgORITHM
 def pegar_sessao():
   try:
     Session = sessionmaker(bind=db)
@@ -8,6 +12,12 @@ def pegar_sessao():
     yield session
   finally:
     session.close()
+
+
+def verificar_token(token, session: Session = Depends(pegar_sessao)):
+     jwt.decode(token, SECRET_KEY, algorithms=[AlgORITHM])
+     usuario = Session.query(Usuario).filter(Usuario.id == 1).first()
+     return usuario
 
 ##definir a função pegar_sessao, que é uma função de dependência do FastAPI. Essa função cria uma sessão do banco de dados usando o SQLAlchemy e a retorna para ser usada em outras partes do código. O uso de yield permite que a sessão seja criada e usada em várias rotas, e depois seja fechada automaticamente quando não for mais necessária.
 

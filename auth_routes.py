@@ -1,6 +1,6 @@
 from models import db
 from sqlalchemy.orm import sessionmaker
-from dependencies import pegar_sessao
+from dependencies import pegar_sessao, verificar_token
 from fastapi import APIRouter, HTTPException, Depends
 from models import Usuario
 from main import bcrypt_context
@@ -22,9 +22,6 @@ def criar_token(id_usuario, duracao_token=timedelta(minutes=Access_TOKEN_EXPIRE_
 
 
   
-
-
-
 def autenticar_usuario(email, senha, session):
     usuario = session.query(Usuario).filter(Usuario.email == email).first()
     if not usuario:
@@ -36,6 +33,7 @@ def autenticar_usuario(email, senha, session):
 @auth_router.get("/")
 async def home():
     return {"message": "Voçe acessou a rota de autenticação"}
+
 
 @auth_router.post("/Registro")
 async def registro(usuario_schema: UsuarioSchema, session: Session = Depends(pegar_sessao)):
@@ -74,8 +72,9 @@ async def login(login_schema: loginSchema, session: Session = Depends(pegar_sess
 
 
 @auth_router.get("/refresh")
-async def use_refresh_token(reflesh_token:)
-
+async def use_refresh_token(usuario: Usuario = Depends(verificar_token)):
+       access_token = criar_token(usuario.id)
+       return {"access_token": access_token, "token_type": "bearer"}
 ##autenticar_usuario é uma função que verifica se um usuário com o email e senha fornecidos existe no banco de dados. Ele consulta o banco de dados para encontrar um usuário com o email fornecido, e se encontrar, verifica se a senha fornecida corresponde à senha armazenada no banco de dados usando a função verify do bcrypt_context. Se o usuário não for encontrado ou a senha não corresponder, a função retorna False. Caso contrário, ela retorna o objeto do usuário autenticado.
 
 
